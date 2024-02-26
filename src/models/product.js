@@ -2,13 +2,13 @@ import { Schema, model } from 'mongoose'
 const productSchema = new Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         minLength: 3
     },
     sku: { type: String },
     price:{
         type: Number,
-        require: true,
+        required: true,
         minLength: 1
     },
     url: { type: String },
