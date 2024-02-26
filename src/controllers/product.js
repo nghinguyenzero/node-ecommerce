@@ -2,8 +2,14 @@ import Product from '../models/product.js'
 import {productValid} from '../validation/product.js'
 
 
-export const getAll = async(req, res) => {
+export const getList = async(req, res) => {
     try {
+        const {
+            _page = 1, 
+            _limit = 10, 
+            _sort='createdBy',
+            _order='asc'
+        } = req.query
         const products = await Product.find()
         if(products.length === 0 ) {
             return res.status(404).json({ 

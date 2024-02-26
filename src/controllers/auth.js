@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 dotenv.config()
-const {SECRET_CODE} = process.env
+const {SECRET_CODE = 'nghinguyenzero' } = process.env
 
 export const signUp = async(req, res) => {
     try {
