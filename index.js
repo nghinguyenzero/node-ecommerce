@@ -1,6 +1,6 @@
 import express from 'express'
 import { connect } from 'mongoose'
-import router from './routes/index.js'
+import router from './src/routes/index.js'
 import dotenv from 'dotenv'
 
 dotenv.config()
