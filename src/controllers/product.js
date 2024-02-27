@@ -10,15 +10,23 @@ export const getList = async(req, res) => {
             _sort='createdBy',
             _order='asc'
         } = req.query
-        const products = await Product.find()
-        if(products.length === 0 ) {
+        const options ={
+            page: _page,
+            limit: _limit,
+            sort: {
+                [_sort]:_order === 'asc' ? 1 : -1
+            }
+
+        }
+        const datas = await Product.paginate({}, options)
+        if(datas.length === 0 ) {
             return res.status(404).json({ 
                 message: 'Product not found'
             })
         } else {
             return res.status(200).json({ 
                 message: 'Get the products successfully',
-                datas: products
+                datas 
             })
         }
     } catch (error) {
