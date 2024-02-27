@@ -74,7 +74,7 @@ export const login = async(req, res) => {
             })
         }
         // 4.Create JWT
-        const accessToken = jwt.sign({ _id: user._id }, SECRET_CODE)
+        const accessToken = jwt.sign({ _id: user._id }, SECRET_CODE, {expiresIn: '1d'})
         console.log({accessToken});
 
         // 5. Noti login successfull

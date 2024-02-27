@@ -14,7 +14,11 @@ const productSchema = new Schema({
         minLength: 1
     },
     url: { type: String },
-    description: { type: String }
+    description: { type: String },
+    // desc: {
+    //     type:String,
+    //     required: true
+    // }
 }, {
     timestamps: true,
     versionKey: false

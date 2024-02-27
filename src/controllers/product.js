@@ -92,19 +92,6 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
     try {
-        // const { error } = productValid.validate(req.body, { abortEarly: false})
-        // console.log({ error:  productValid.validate(req.body)});
-        // if(error) {
-        //     return res.status(400).json({ message: error.details[0].message})
-        // }
-        // const product = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        // if(!product) {
-        //     return res.status(404).json({ message: 'Update an unsuccessful product' })
-        // }
-        // return res.status(200).json({ 
-        //     message: 'Update an successful product', 
-        //     datas : product 
-        // })
         const data = Product.findByIdAndDelete(req.params.id)
         if(!data) {
              return res.status(404).json({ message: 'Delete product unsuccessful' })
