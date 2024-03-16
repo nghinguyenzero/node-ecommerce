@@ -1,15 +1,19 @@
 import express from 'express'
-import routerProduct from "./product.js";
+import routerProducts from "./products.js";
 import routerAuth from "./auth.js";
 import routerImages from "./upload.js";
+import routerCategories from "./categories.js";
+
 
 
 
 const router = express.Router()
 
-router.use('/product', routerProduct)
+router.use('/products', routerProducts)
 router.use('/auth', routerAuth)
 router.use('/images', routerImages)
+router.use('/categories', routerCategories)
+
 
 
 

@@ -15,10 +15,11 @@ const productSchema = new Schema({
     },
     url: { type: String },
     description: { type: String },
-    // desc: {
-    //     type:String,
-    //     required: true
-    // }
+    categoryId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    }
 }, {
     timestamps: true,
     versionKey: false

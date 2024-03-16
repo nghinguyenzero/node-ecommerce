@@ -1,5 +1,6 @@
+import Category from '../models/Category.js'
 import Product from '../models/product.js'
-import {productValid} from '../validation/product.js'
+import {productValidator} from '../validation/product.js'
 
 
 export const getList = async(req, res) => {
@@ -15,7 +16,10 @@ export const getList = async(req, res) => {
             limit: _limit,
             sort: {
                 [_sort]:_order === 'asc' ? 1 : -1
-            }
+            },
+            populate: {
+                path: 'categoryId',
+              },
 
         }
         const datas = await Product.paginate({}, options)
@@ -37,7 +41,7 @@ export const getList = async(req, res) => {
 
 export const getDetail = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
+        const product = await Product.findById(req.params.id).populate('categoryId')
         if(!product) {
             return res.status(404).json({ message: 'Product not found' })
         }
@@ -53,17 +57,30 @@ export const getDetail = async (req, res) => {
 export const create = async (req, res) => {
 
     try {
-        const {error} = productValid.validate(req.body, { abortEarly: false})
+        const {error} = productValidator.validate(req.body, { abortEarly: false})
         if(error) {
-            return res.status(400).json({ message: error.details[0].message})
+            return res.status(400).json({ 
+                message: error.details[0].message || 'Please re-check your data !'
+            })
         }
-        const product = await Product.create(req.body)
-        if(!product) {
-            return res.status(404).json({ message: 'Create an unsuccessful product' })
+        const data = await Product.create(req.body)
+        // console.log({data});
+        if(!data) {
+            return res.status(404).json({ message: 'Create product is not successful !' })
         }
+
+        const updateCategory = await Category.findByIdAndUpdate(data.categoryId, {
+            $addToSet : {
+                products: data._id
+            }
+        })
+        if(!updateCategory) {
+            return res.status(404).json({ message: 'update Category is not successful !' })
+        }
+
         return res.status(200).json({ 
-            message: 'Create an successful product', 
-            datas : product 
+            message: 'Create an successful product !', 
+            datas : data 
         })
     } catch (error) {
         return res.status(500).json({ message: error })
@@ -72,8 +89,8 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        const { error } = productValid.validate(req.body, { abortEarly: false})
-        console.log({ error:  productValid.validate(req.body)});
+        const { error } = productValidator.validate(req.body, { abortEarly: false})
+        console.log({ error:  productValidator.validate(req.body)});
         if(error) {
             return res.status(400).json({ message: error.details[0].message})
         }
@@ -81,6 +98,15 @@ export const update = async (req, res) => {
         if(!product) {
             return res.status(404).json({ message: 'Update an unsuccessful product' })
         }
+        const updateCategory = await Category.findByIdAndUpdate(data.categoryId, {
+            $addToSet : {
+                products: data._id
+            }
+        })
+        if(!updateCategory) {
+            return res.status(404).json({ message: 'update Category is not successful !' })
+        }
+
         return res.status(200).json({ 
             message: 'Update an successful product', 
             datas : product 
@@ -89,6 +115,9 @@ export const update = async (req, res) => {
         return res.status(500).json({ message: error })
     }
 }
+
+// export const getMaxValue
+// get value max in list
 
 export const remove = async (req, res) => {
     try {
